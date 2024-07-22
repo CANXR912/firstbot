@@ -3,6 +3,7 @@ from discord.ext import commands
 from config import TOKEN
 from password_generator import generate_password
 from random import choice
+import random
 
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 
@@ -26,6 +27,18 @@ async def on_message(message: discord.Message):
 @bot.command()
 async def coin(ctx: commands.Context):
     result = choice(["Орел", "Решка"])
+    await ctx.send(result)
+
+@bot.command()
+async def roll(ctx, dice: str):
+    """Rolls a dice in NdN format."""
+    try:
+        rolls, limit = map(int, dice.split('d'))
+    except Exception:
+        await ctx.send('Format has to be in NdN!')
+        return
+
+    result = ', '.join(str(random.randint(1, limit)) for r in range(rolls))
     await ctx.send(result)
 
 
